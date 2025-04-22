@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./TrackList.css";
-import { DEFAULT_COVER, FILES_BASE_URL, GENRES } from "../../constants";
+import { DEFAULT_COVER, FILES_BASE_URL, GENRES } from "../../config";
 
 const TrackList = ({
   tracks,
@@ -136,22 +136,22 @@ const TrackList = ({
       </div>
 
       <div className="sort-controls">
-        <button onClick={() => requestSort("title")}>
+        <button type="button" onClick={() => requestSort("title")}>
           Sort by Title{" "}
           {sortConfig.key === "title" &&
             (sortConfig.direction === "asc" ? "↑" : "↓")}
         </button>
-        <button onClick={() => requestSort("artist")}>
+        <button type="button" onClick={() => requestSort("artist")}>
           Sort by Artist{" "}
           {sortConfig.key === "artist" &&
             (sortConfig.direction === "asc" ? "↑" : "↓")}
         </button>
-        <button onClick={() => requestSort("album")}>
+        <button type="button" onClick={() => requestSort("album")}>
           Sort by Album{" "}
           {sortConfig.key === "album" &&
             (sortConfig.direction === "asc" ? "↑" : "↓")}
         </button>
-        <button onClick={() => requestSort("createdAt")}>
+        <button type="button" onClick={() => requestSort("createdAt")}>
           Sort by Date{" "}
           {sortConfig.key === "createdAt" &&
             (sortConfig.direction === "asc" ? "↑" : "↓")}
@@ -161,8 +161,8 @@ const TrackList = ({
       {loading && (
         <div className="loading-container">
           <div className="loading-spinner">
-            <div className="spinner-sector spinner-sector-blue"></div>
-            <div className="spinner-sector spinner-sector-white"></div>
+            <div className="spinner-sector spinner-sector-blue" />
+            <div className="spinner-sector spinner-sector-white" />
           </div>
           <p>Loading tracks...</p>
         </div>
@@ -192,10 +192,9 @@ const TrackList = ({
                     {track.genres?.length > 0 && (
                       <div className="track-genres">
                         <strong>Genres: </strong>
-                        {track.genres.map((genre, index) => (
-                          <span key={index} className="genre-tag">
+                        {track.genres.map((genre) => (
+                          <span key={genre} className="genre-tag">
                             {genre}
-                            {index < track.genres.length - 1 ? ", " : ""}
                           </span>
                         ))}
                       </div>
@@ -208,7 +207,10 @@ const TrackList = ({
 
                     {track.audioFile && (
                       <audio
-                        ref={(el) => (audioRefs.current[track.id] = el)}
+                        ref={(el) => {
+                          audioRefs.current[track.id] = el;
+                          return el;
+                        }}
                         controls
                         className="audio-player"
                         onPlay={() => handlePlay(track.id)}
@@ -232,6 +234,7 @@ const TrackList = ({
                       </label>
                       {track.audioFile && (
                         <button
+                          type="button"
                           className="delete-button small"
                           onClick={() => onRemoveFile(track)}
                         >
@@ -243,12 +246,14 @@ const TrackList = ({
 
                   <div className="track-actions">
                     <button
+                      type="button"
                       className="edit-button"
                       onClick={() => onEdit(track)}
                     >
                       Edit
                     </button>
                     <button
+                      type="button"
                       className="delete-button"
                       onClick={() => onDelete(track)}
                     >
@@ -262,6 +267,7 @@ const TrackList = ({
 
           <div className="pagination">
             <button
+              type="button"
               onClick={() => handlePageChange(paginationMeta.page - 1)}
               disabled={paginationMeta.page === 1}
             >
@@ -271,6 +277,7 @@ const TrackList = ({
               Page {paginationMeta.page} of {paginationMeta.totalPages}
             </span>
             <button
+              type="button"
               onClick={() => handlePageChange(paginationMeta.page + 1)}
               disabled={paginationMeta.page === paginationMeta.totalPages}
             >
